@@ -1,4 +1,4 @@
-# ekulcreacion
+# Dekulcreacion
 
 Dekulcreacion is a backend application designed to securely manage and store information about children beneficiaries. It supports operations such as registering child profiles, updating health data like BMI, tracking age-specific milestones, and managing allergy information.
 
