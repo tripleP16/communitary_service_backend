@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - dev
   pull_request:
     branches:
       - main
+      - dev
 
 jobs:
   build-and-test:
@@ -27,6 +29,9 @@ jobs:
       run: npm install
 
     - name: Build
+      env: 
+        ENV: ${{ secrets.ENV }}
+        PORT: ${{ secrets.PORT }}
       run: npm run build
 
     - name: Run tests
