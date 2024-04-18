@@ -1,4 +1,4 @@
-# Dekulcreacion
+# ekulcreacion
 
 Dekulcreacion is a backend application designed to securely manage and store information about children beneficiaries. It supports operations such as registering child profiles, updating health data like BMI, tracking age-specific milestones, and managing allergy information.
 
@@ -27,11 +27,11 @@ Before installing the project, ensure you have the following installed:
 npm run start
 
 ### Built With
-- (NestJs)[https://nestjs.com/] - The web framework used.
-- (Mongoose)[https://mongoosejs.com/] - ODM for MongoDB.
-- (Passport)[https://www.passportjs.org/] - Used for handling authentication.
-- (Nodemailer)[https://www.nodemailer.com/] - Module for email sending.
-- (Pug)[https://pugjs.org/api/getting-started.html] - Template engine for email templates.
+- [NestJs](https://nestjs.com/) - The web framework used.
+- [Mongoose](https://mongoosejs.com/) - ODM for MongoDB.
+- [Passport](https://www.passportjs.org/) - Used for handling authentication.
+- [Nodemailer](https://www.nodemailer.com/) - Module for email sending.
+- [Pug](https://pugjs.org/api/getting-started.html) - Template engine for email templates.
 
 
 ### Contributing
@@ -42,5 +42,5 @@ npm run start
 
 
 ## Made with :heart: By
-- (Pablo)[https://github.com/tripleP16]
-- (Arturo)[https://github.com/ArtuKILL]
+- [Pablo Perez](https://pugjs.org/api/getting-started.html)
+- [Arturo Lecuona](https://github.com/ArtuKILL)
