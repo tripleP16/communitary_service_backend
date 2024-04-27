@@ -21,7 +21,6 @@ async function bootstrap() {
       .setTitle('Dekulcreacion API')
       .setDescription('API for dekulcreacion app')
       .setVersion('1.0')
-      .addTag('Init')
       .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('docs', app, document);
