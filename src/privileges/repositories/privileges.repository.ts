@@ -1,6 +1,7 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Privileges } from '../entities/privileges.entity';
+import { NotFoundException } from '@nestjs/common';
 
 export class PrivilegesRepository {
   constructor(
@@ -21,5 +22,17 @@ export class PrivilegesRepository {
 
   async findPrivileges(): Promise<Privileges[]> {
     return this._privileModel.find().populate('actions').exec();
+  }
+
+  async verifyPrivilegesExists(ids: string[]): Promise<Privileges[]> {
+    const privileges = await this._privileModel
+      .find({ _id: { $in: ids } })
+      .exec();
+
+    if (privileges.length === ids.length) return privileges;
+
+    throw new NotFoundException(
+      'One or many selected privileges does not exist',
+    );
   }
 }
