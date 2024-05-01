@@ -20,8 +20,12 @@ export class PrivilegesRepository {
     return this._privileModel.findById(id).populate('actions').exec();
   }
 
-  async findPrivileges(): Promise<Privileges[]> {
-    return this._privileModel.find().populate('actions').exec();
+  async findPrivileges(getActions: boolean = true): Promise<Privileges[]> {
+    const base = this._privileModel.find();
+    if (getActions) {
+      base.populate('actions');
+    }
+    return base.exec();
   }
 
   async verifyPrivilegesExists(ids: string[]): Promise<Privileges[]> {
