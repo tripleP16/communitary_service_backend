@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
 @Schema()
-export class Users extends Document {
+export class Actions extends Document {
   @Prop({
     type: String,
     default: () => uuidv4(),
@@ -14,19 +14,7 @@ export class Users extends Document {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
-  lastname: string;
-
-  @Prop({ required: true })
-  email: string;
-
-  @Prop({ required: true })
-  password: string;
-
-  @Prop({ required: true })
-  isActive: boolean;
-
   @Prop([{ type: String, ref: 'Privileges' }])
   privileges: string[];
 }
-export const UsersSchema = SchemaFactory.createForClass(Users);
+export const ActionsSchema = SchemaFactory.createForClass(Actions);
