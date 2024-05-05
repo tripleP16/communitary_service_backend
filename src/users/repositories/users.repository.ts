@@ -18,4 +18,22 @@ export class UsersRepository {
       }
     }
   }
+
+  async getUserByEmail(
+    email: string,
+    isActive: boolean = true,
+  ): Promise<Users | null> {
+    return await this._usersModel
+      .findOne({
+        email: email,
+        isActive: isActive,
+      })
+      .populate({
+        path: 'privileges',
+        populate: {
+          path: 'actions',
+        },
+      })
+      .exec();
+  }
 }

@@ -10,4 +10,6 @@ export const configValidationSchema = Joi.object({
   SMTP_SECURE: Joi.boolean(),
   SMTP_USER: Joi.string(),
   SMTP_PASS: Joi.string(),
+  REFRESH_SECRET: Joi.string(),
+  ACCESS_SECRET: Joi.string(),
 });

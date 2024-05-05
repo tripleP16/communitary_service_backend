@@ -10,6 +10,7 @@ import { ResponseInterceptor } from './utils/shared/api/interceptors/response.in
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpExceptionFilter } from './utils/shared/api/filters/exception.filter';
 import { MailModule } from './mail/mail.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { MailModule } from './mail/mail.module';
     UsersModule,
     PrivilegesModule,
     MailModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
