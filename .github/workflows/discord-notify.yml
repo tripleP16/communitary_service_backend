@@ -1,0 +1,23 @@
+name: Discord Notify
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  discord_notify:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Notify Discord
+      uses: Ilshidur/action-discord@0.3.2
+      env:
+        DISCORD_WEBHOOK: 'https://discord.com/api/webhooks/1237097392390537279/d-Akb0l4sZE18yUmT2MK33Ulo9D7jngerzqR0mt9g93h92eeF7jumRr_tzLkzTKy8sHc'
+        DISCORD_USERNAME: 'Back - Github'
+        DISCORD_AVATAR: 'https://kinsta.com/wp-content/uploads/2022/06/nest-js-logo.png'
+      
