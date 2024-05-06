@@ -18,7 +18,7 @@ export class TokenService {
         },
         {
           secret: this.configService.get<string>('ACCESS_SECRET'),
-          expiresIn: '1m',
+          expiresIn: '1h',
         },
       ),
 

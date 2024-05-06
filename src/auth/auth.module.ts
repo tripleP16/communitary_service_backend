@@ -6,6 +6,7 @@ import { RefreshTokenStrategy } from './strategies/refresh.token.strategy';
 import { AuthService } from './services/auth.service';
 import { TokenService } from './services/token.service';
 import { UsersModule } from 'src/users/users.module';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [JwtModule.register({}), UsersModule],
@@ -14,7 +15,9 @@ import { UsersModule } from 'src/users/users.module';
     RefreshTokenStrategy,
     AuthService,
     TokenService,
+    RolesGuard,
   ],
   controllers: [AuthController],
+  exports: [RolesGuard],
 })
 export class AuthModule {}

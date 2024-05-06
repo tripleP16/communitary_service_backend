@@ -1,12 +1,13 @@
 import {
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { LoginDto } from '../dtos/login.dto';
-import { TokenService } from './token.service';
 import { UsersRepository } from 'src/users/repositories/users.repository';
 import { PasswordService } from 'src/users/services/password.service';
+import { LoginDto } from '../dtos/login.dto';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class AuthService {
@@ -32,5 +33,15 @@ export class AuthService {
       element.actions.flatMap((action) => action.name),
     );
     return await this.tokenService.getTokens(user.id, actions);
+  }
+
+  async refreshTokens(userId: string) {
+    const user: any = await this.usersRepository.getUserById(userId);
+    if (!user) throw new ForbiddenException('Access Denied');
+    const actions = user.privileges.flatMap((element) =>
+      element.actions.flatMap((action) => action.name),
+    );
+    const tokens = await this.tokenService.getTokens(user.id, actions);
+    return tokens;
   }
 }
