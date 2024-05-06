@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
-@Schema({})
+@Schema()
 export class Users extends Document {
   @Prop({
     type: String,

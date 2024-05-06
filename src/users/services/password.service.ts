@@ -15,8 +15,4 @@ export class PasswordService {
       characters.charAt(Math.floor(Math.random() * characters.length)),
     ).join('');
   }
-
-  async comparePasswords(unhashedPassword: string, hashedPassword: string) {
-    return await bcrypt.compare(unhashedPassword, hashedPassword);
-  }
 }
