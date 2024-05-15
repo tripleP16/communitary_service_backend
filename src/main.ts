@@ -8,6 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
+  app.setGlobalPrefix('api');
 
   const configService = app.get(ConfigService);
 
@@ -20,10 +21,10 @@ async function bootstrap() {
       .setTitle('Dekulcreacion API')
       .setDescription('API for dekulcreacion app')
       .setVersion('1.0')
-      .addTag('Init')
+      .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
       .build();
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, document);
+    SwaggerModule.setup('docs', app, document);
   }
 
   await app.listen(port, '0.0.0.0');
