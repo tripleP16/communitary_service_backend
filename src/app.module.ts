@@ -11,6 +11,7 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpExceptionFilter } from './utils/shared/api/filters/exception.filter';
 import { MailModule } from './mail/mail.module';
 import { AuthModule } from './auth/auth.module';
+import { AlergiesModule } from './alergies/alergies.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AuthModule } from './auth/auth.module';
     PrivilegesModule,
     MailModule,
     AuthModule,
+    AlergiesModule,
   ],
   controllers: [AppController],
   providers: [
