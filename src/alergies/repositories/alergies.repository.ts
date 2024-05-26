@@ -18,4 +18,8 @@ export class AlergiesRepository {
       }
     }
   }
+
+  async getAlergies(): Promise<Alergies[]> {
+    return await this._alergiesModel.find().exec();
+  }
 }

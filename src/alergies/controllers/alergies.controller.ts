@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/auth/guards/access.token.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -18,5 +18,11 @@ export class AlergiesController {
   @UseGuards(RolesGuard)
   async createAlergies(@Body() alergies: CreateAlergiesDto) {
     return this._alergiesService.createAlergies(alergies);
+  }
+
+  @Get('/')
+  @UseGuards(AccessTokenGuard)
+  async getAlergies() {
+    return this._alergiesService.getAlergies();
   }
 }
