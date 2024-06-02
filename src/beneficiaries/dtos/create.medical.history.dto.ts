@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsInt, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsDate, IsInt, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateMedicalHistoryDto {
   @ApiProperty({
@@ -32,7 +32,7 @@ export class CreateMedicalHistoryDto {
     type: 'date',
     description: 'Date of creation of the medical history',
   })
-  @IsDateString()
+  @IsDate()
   @IsNotEmpty()
   readonly createdAt: Date;
 }

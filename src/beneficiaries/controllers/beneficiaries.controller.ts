@@ -1,8 +1,9 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Actions } from 'src/auth/decorators/actions.decorator';
 import { AccessTokenGuard } from 'src/auth/guards/access.token.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { PaginationParamsDto } from 'src/utils/shared/dtos/pagination.params.dto';
 import { CreateBenficiariesDto } from '../dtos/create.benficiary.dto';
 import { BeneficiariesService } from '../services/benifciaries.service';
 
@@ -18,5 +19,10 @@ export class BeneficiariesController {
   @Post('/')
   async create(@Body() dto: CreateBenficiariesDto) {
     return this.service.create(dto);
+  }
+  @UseGuards(AccessTokenGuard)
+  @Get('/')
+  async getBeneficiaries(@Query() query: PaginationParamsDto) {
+    return this.service.getBeneficiaries(query);
   }
 }
