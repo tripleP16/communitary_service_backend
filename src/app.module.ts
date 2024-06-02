@@ -12,6 +12,7 @@ import { HttpExceptionFilter } from './utils/shared/api/filters/exception.filter
 import { MailModule } from './mail/mail.module';
 import { AuthModule } from './auth/auth.module';
 import { AlergiesModule } from './alergies/alergies.module';
+import { BeneficiariesModule } from './beneficiaries/beneficiaries.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AlergiesModule } from './alergies/alergies.module';
     MailModule,
     AuthModule,
     AlergiesModule,
+    BeneficiariesModule,
   ],
   controllers: [AppController],
   providers: [
