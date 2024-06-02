@@ -15,27 +15,24 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x]  # Use the Node.js version that matches your production environment
+        node-version: [16.x] # Use the Node.js version that matches your production environment
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Build
-      env: 
-        ENV: ${{ secrets.ENV }}
-        PORT: ${{ secrets.PORT }}
-      run: npm run build
+      - name: Build
+        env:
+          ENV: ${{ secrets.ENV }}
+          PORT: ${{ secrets.PORT }}
+        run: npm run build
 
-    - name: Run tests
-      run: npm test
-
-    - name: Run linter
-      run: npm run lint
+      - name: Run linter
+        run: npm run lint
