@@ -21,7 +21,7 @@ export class UsersService {
     await this.privilegesRepository.verifyPrivilegesExists(ids);
     const password = await this.passwordService.generateRandomString();
     const hashedPassword = await this.passwordService.hashPassword(password);
-    const dao = CreateUserMapper.mapToDao(dto, hashedPassword);
+    const dao = CreateUserMapper.mapToEntity(dto, hashedPassword);
     await this.usersRepository.createUser(dao);
     await this.mailService.sendPasswordEmail(
       dao.email,

@@ -13,5 +13,6 @@ import { AlergiesService } from './services/alergies.service';
   ],
   controllers: [AlergiesController],
   providers: [AlergiesService, AlergiesRepository],
+  exports: [AlergiesService],
 })
 export class AlergiesModule {}
