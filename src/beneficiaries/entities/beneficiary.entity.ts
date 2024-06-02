@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { Alergies } from 'src/alergies/entities/alergies.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { MedicalHistory } from './medical.history.entity';
 import { Parent } from './parent.entity';
@@ -32,7 +33,7 @@ export class Beneficiaries extends Document {
   gender: string;
 
   @Prop([{ type: String, ref: 'Alergies' }])
-  alergies: string[];
+  alergies: Alergies[];
 
   @Prop([{ type: MedicalHistory }])
   medicalHistories: Types.ArraySubdocument<MedicalHistory>;

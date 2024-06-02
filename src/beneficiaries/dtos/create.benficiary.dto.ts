@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsBoolean,
-  IsDateString,
+  IsDate,
   IsNotEmpty,
   IsOptional,
   IsPhoneNumber,
@@ -73,7 +73,7 @@ export class CreateBenficiariesDto {
     type: 'date',
     description: 'Birthday of beneficiary',
   })
-  @IsDateString()
+  @IsDate()
   @IsNotEmpty()
   readonly birthday: Date;
 
