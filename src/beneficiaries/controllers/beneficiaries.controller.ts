@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Actions } from 'src/auth/decorators/actions.decorator';
 import { AccessTokenGuard } from 'src/auth/guards/access.token.guard';
@@ -24,5 +32,11 @@ export class BeneficiariesController {
   @Get('/')
   async getBeneficiaries(@Query() query: PaginationParamsDto) {
     return this.service.getBeneficiaries(query);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('/:id')
+  async getBeneficiaryById(@Param('id') id: string) {
+    return this.service.getBeneficiaryById(id);
   }
 }
