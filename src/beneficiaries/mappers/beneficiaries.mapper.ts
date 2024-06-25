@@ -40,7 +40,7 @@ export class BeneficiariesMapper {
         lastname: dto.parent.lastname,
         phoneNumber: dto.parent.phoneNumber,
       },
-      alergies: dto.alergies.map((a) => a.id),
+      alergies: dto.alergies ? dto.alergies.map((a) => a.id) : [],
       medicalHistories: [
         {
           _id: CreateUUIDService.getUUID(),
