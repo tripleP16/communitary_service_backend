@@ -32,4 +32,14 @@ export class BeneficiariesService {
       await this._beneficiariesRepository.getBeneficiaries(query);
     return beneficiaries;
   }
+
+  async getBeneficiaryById(id: string) {
+    const beneficiary = await this._beneficiariesRepository.getBeneficiaryById(
+      id,
+    );
+    if (!beneficiary) {
+      throw new NotFoundException('Beneficiary not found');
+    }
+    return beneficiary;
+  }
 }

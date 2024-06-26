@@ -101,4 +101,14 @@ export class BeneficiariesRepository {
     }
     return query.exec();
   }
+
+  async getBeneficiaryById(id: string) {
+    const beneficiary = await this._beneficiariesModel
+      .findById(id)
+      .populate('alergies');
+    if (!beneficiary) {
+      throw new NotFoundException('Beneficiary not found');
+    }
+    return BeneficiariesMapper.mapToGetDao(beneficiary);
+  }
 }
