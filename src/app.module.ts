@@ -13,6 +13,7 @@ import { MailModule } from './mail/mail.module';
 import { AuthModule } from './auth/auth.module';
 import { AlergiesModule } from './alergies/alergies.module';
 import { BeneficiariesModule } from './beneficiaries/beneficiaries.module';
+import { ForgotPasswordModule } from './forgot-password/forgot.password.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { BeneficiariesModule } from './beneficiaries/beneficiaries.module';
     AuthModule,
     AlergiesModule,
     BeneficiariesModule,
+    ForgotPasswordModule,
   ],
   controllers: [AppController],
   providers: [

@@ -54,4 +54,15 @@ export class UsersRepository {
       })
       .exec();
   }
+
+  async updatePassword(userId: string, hashedPassword: string) {
+    try {
+      await this._usersModel.updateOne(
+        { _id: userId },
+        { password: hashedPassword },
+      );
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }
