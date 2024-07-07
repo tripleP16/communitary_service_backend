@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { rethrow } from '@nestjs/core/helpers/rethrow';
 import { MailService } from 'src/mail/services/mail.service';
 import { PrivilegesRepository } from 'src/privileges/repositories/privileges.repository';
 import { CreateUserDto } from '../dtos/create.user.dto';
+import { RestartPasswordDto } from '../dtos/restart.password.dto';
 import { CreateUserMapper } from '../mappers/create.user.mapper';
 import { UsersRepository } from '../repositories/users.repository';
 import { PasswordService } from './password.service';
-import { RestartPasswordDto } from '../dtos/restart.password.dto';
-import { rethrow } from '@nestjs/core/helpers/rethrow';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +15,7 @@ export class UsersService {
     private readonly privilegesRepository: PrivilegesRepository,
     private readonly passwordService: PasswordService,
     private readonly mailService: MailService,
-  ) {}
+  ) { }
 
   async create(dto: CreateUserDto) {
     const ids = dto.privileges.map((element) => element.id);
@@ -42,5 +42,12 @@ export class UsersService {
     }
 
     return;
+  }
+
+
+  async deleteUser(userId: string) {
+
+    await this.usersRepository.deleteUser(userId);
+
   }
 }

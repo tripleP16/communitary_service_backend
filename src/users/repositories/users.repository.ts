@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDao } from '../dao/create.user.dao';
@@ -6,7 +6,7 @@ import { Users } from '../entities/users.entity';
 
 @Injectable()
 export class UsersRepository {
-  constructor(@InjectModel(Users.name) private _usersModel: Model<Users>) {}
+  constructor(@InjectModel(Users.name) private _usersModel: Model<Users>) { }
 
   async createUser(user: CreateUserDao): Promise<Users> {
     try {
@@ -65,4 +65,15 @@ export class UsersRepository {
       throw new Error(error);
     }
   }
+
+  async deleteUser(userId: string) {
+
+    const result = await this._usersModel.updateOne({ _id: userId }, { isActive: false });
+
+    if (result.matchedCount === 0) {
+      throw new NotFoundException('User not found');
+    }
+
+  }
+
 }
