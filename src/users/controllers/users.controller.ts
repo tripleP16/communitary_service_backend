@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../dtos/create.user.dto';
 import { UsersService } from '../services/users.service';
@@ -18,5 +18,13 @@ export class UsersController {
   @Post('/create')
   async createUser(@Body() dto: CreateUserDto) {
     return this._userService.create(dto);
+  }
+
+  @Actions('DELETE_USER')
+  @UseGuards(AccessTokenGuard)
+  @UseGuards(RolesGuard)
+  @Delete('/delete/:userId')
+  async deleteUser(@Param('userId') userId: string) {
+    return this._userService.deleteUser(userId);
   }
 }
