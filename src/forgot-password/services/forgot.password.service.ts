@@ -4,14 +4,14 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { TokenService } from '../../auth/services/token.service';
+import { MailService } from '../../mail/services/mail.service';
+import { UsersRepository } from '../../users/repositories/users.repository';
 import { PasswordService } from '../../users/services/password.service';
 import { CreateCodeDto } from '../dtos/create.code.dto';
+import { ValidateCodeDto } from '../dtos/validate.code.dto';
 import { ForgotPasswordMapper } from '../mappers/forgot.password.mapper';
 import { CodeRepository } from '../repositories/code.repository';
-import { UsersRepository } from '../../users/repositories/users.repository';
-import { MailService } from '../../mail/services/mail.service';
-import { ValidateCodeDto } from '../dtos/validate.code.dto';
-import { TokenService } from '../../auth/services/token.service';
 
 @Injectable()
 export class ForgotPasswordService {
@@ -21,7 +21,7 @@ export class ForgotPasswordService {
     private readonly usersRepository: UsersRepository,
     private readonly mailService: MailService,
     private readonly tokenService: TokenService,
-  ) {}
+  ) { }
 
   async createCode(dto: CreateCodeDto) {
     const user = await this.usersRepository.getUserByEmail(dto.email);
@@ -44,7 +44,7 @@ export class ForgotPasswordService {
   async validateCode(dto: ValidateCodeDto) {
     const code = await this.codeRepository.getCodeByCode(dto.code);
     if (!code) {
-      throw new UnauthorizedException('The code does not exists');
+      throw new NotFoundException('The code does not exists');
     }
     const now = new Date();
     if (code.expiresAt < now) {
@@ -54,7 +54,7 @@ export class ForgotPasswordService {
 
     const user = await this.usersRepository.getUserByEmail(code.email);
     if (!user) {
-      throw new NotFoundException('User does not exists');
+      throw new UnauthorizedException('User does not exists');
     }
 
     const token = await this.tokenService.getTokens(user.id, []);
