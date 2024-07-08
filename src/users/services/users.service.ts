@@ -10,6 +10,7 @@ import { PasswordService } from './password.service';
 
 @Injectable()
 export class UsersService {
+
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly privilegesRepository: PrivilegesRepository,
@@ -46,8 +47,13 @@ export class UsersService {
 
 
   async deleteUser(userId: string) {
-
     await this.usersRepository.deleteUser(userId);
+  }
 
+  async updateUser(userId: string, dto: CreateUserDto) {
+    const ids = dto.privileges.map((element) => element.id);
+    await this.privilegesRepository.verifyPrivilegesExists(ids);
+    const dao = CreateUserMapper.mapToEntityForEdit(dto, userId);
+    await this.usersRepository.updateUser(userId, dao);
   }
 }

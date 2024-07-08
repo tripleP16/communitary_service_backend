@@ -3,9 +3,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDao } from '../dao/create.user.dao';
 import { Users } from '../entities/users.entity';
+import { rethrow } from '@nestjs/core/helpers/rethrow';
 
 @Injectable()
 export class UsersRepository {
+
   constructor(@InjectModel(Users.name) private _usersModel: Model<Users>) { }
 
   async createUser(user: CreateUserDao): Promise<Users> {
@@ -73,6 +75,26 @@ export class UsersRepository {
     if (result.matchedCount === 0) {
       throw new NotFoundException('User not found');
     }
+
+  }
+
+  async updateUser(userId: string, dto: CreateUserDao) {
+    try {
+      const result = await this._usersModel.updateOne(
+        { _id: userId },
+        dto,
+      );
+
+      if (result.matchedCount === 0) {
+        throw new NotFoundException('User not found');
+      }
+    } catch (error) {
+      if (error.code == 11000) {
+        throw new ConflictException('Email already exists');
+      }
+      rethrow(error);
+    }
+    
 
   }
 

@@ -13,4 +13,15 @@ export class CreateUserMapper {
       isActive: true,
     };
   }
+
+  static mapToEntityForEdit(dto: CreateUserDto, userId: string): CreateUserDao {
+    const ids = dto.privileges.map((element) => element.id);
+    return {
+      _id: userId,
+      ...dto,
+      privileges: ids,
+      password: undefined,
+      isActive: true,
+    };
+  }
 }
