@@ -6,6 +6,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { PaginationParamsDto } from 'src/utils/shared/dtos/pagination.params.dto';
 import { CreateUserDto } from '../dtos/create.user.dto';
 import { UsersService } from '../services/users.service';
+import { GetUser } from 'src/utils/shared/decorators/user.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -34,8 +35,8 @@ export class UsersController {
   @UseGuards(AccessTokenGuard)
   @UseGuards(RolesGuard)
   @Delete('/delete/:userId')
-  async deleteUser(@Param('userId') userId: string) {
-    return this._userService.deleteUser(userId);
+  async deleteUser(@Param('userId') userId: string, @GetUser() user: string,) {
+    return this._userService.deleteUser(userId, user);
   }
 
   @Actions('UPDATE_USER')

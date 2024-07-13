@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { rethrow } from '@nestjs/core/helpers/rethrow';
 import { MailService } from 'src/mail/services/mail.service';
 import { PrivilegesRepository } from 'src/privileges/repositories/privileges.repository';
@@ -48,7 +48,10 @@ export class UsersService {
   }
 
 
-  async deleteUser(userId: string) {
+  async deleteUser(userId: string, userLogged: string) {
+    if (userLogged === userId) {
+      throw new ForbiddenException('You cannot delete your own account. Only admin users can delete users.');
+    }
     await this.usersRepository.deleteUser(userId);
   }
 
