@@ -6,6 +6,7 @@ import { CreateBenficiariesDto } from '../dtos/create.benficiary.dto';
 import { Beneficiaries } from '../entities/beneficiary.entity';
 import { MedicalHistory } from '../entities/medical.history.entity';
 import { Parent } from '../entities/parent.entity';
+import { GetMedicalHistoryDao } from './../dao/get.beneficiaries.dao';
 
 export class BeneficiariesMapper {
   static mapToBeneficiariesPaginated(
@@ -52,10 +53,24 @@ export class BeneficiariesMapper {
     };
   }
 
+
+  static mapMedicalHistoryToDao(medicalHistory: MedicalHistory): GetMedicalHistoryDao {
+    return {
+      id: medicalHistory._id,
+      height: medicalHistory.height,
+      weight: medicalHistory.weight,
+      createdAt: medicalHistory.createdAt,
+    }
+  }
+
   static mapToGetDao(beneficiary: Beneficiaries): GetBeneficiariesDao {
     const parent = beneficiary.parent as unknown as Parent;
     const medicalHistories =
       beneficiary.medicalHistories as unknown as MedicalHistory[];
+    const medicalHistoriesMapped = medicalHistories.map((m) => this.mapMedicalHistoryToDao(m));
+    const latestMedicalHistory = medicalHistoriesMapped.reduce((latest, current) =>
+      current.createdAt > latest.createdAt ? current : latest
+    );
     return {
       id: beneficiary._id,
       name: beneficiary.name,
@@ -68,19 +83,19 @@ export class BeneficiariesMapper {
         id: a._id,
         name: a.name,
       })),
-      medicalHistories: medicalHistories.map((m) => ({
-        id: m._id,
-        height: m.height,
-        weight: m.weight,
-        createdAt: m.createdAt,
-      })),
-
+      medicalHistories: medicalHistoriesMapped,
       parent: {
         id: parent._id,
         name: parent.name,
         lastname: parent.lastname,
         phoneNumber: parent.phoneNumber,
       },
+      needsMedicalHistoryUpdate: this._needsMedicalHistoryUpdate(latestMedicalHistory),
     };
+  }
+  static _needsMedicalHistoryUpdate(latestMedicalHistory: GetMedicalHistoryDao): boolean {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+    return latestMedicalHistory.createdAt < oneMonthAgo;
   }
 }

@@ -4,6 +4,8 @@ import { PaginationParamsDto } from 'src/utils/shared/dtos/pagination.params.dto
 import { CreateBenficiariesDto } from '../dtos/create.benficiary.dto';
 import { BeneficiariesMapper } from '../mappers/beneficiaries.mapper';
 import { BeneficiariesRepository } from '../repositories/beneficiaries.repository';
+import { CreateMedicalHistoryDto } from '../dtos/create.medical.history.dto';
+import { rethrow } from '@nestjs/core/helpers/rethrow';
 
 @Injectable()
 export class BeneficiariesService {
@@ -41,5 +43,13 @@ export class BeneficiariesService {
       throw new NotFoundException('Beneficiary not found');
     }
     return beneficiary;
+  }
+
+  async addMedicalHistory(id: string, dto: CreateMedicalHistoryDto) {
+    try {
+      await this._beneficiariesRepository.addMedicalHistory(id, dto);
+    }catch(e){
+      rethrow(e);
+    }
   }
 }

@@ -7,6 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PaginationParamsDto } from 'src/utils/shared/dtos/pagination.params.dto';
 import { CreateBeneficiariesDao } from '../dao/create.beneficiaries.dao';
+import { CreateMedicalHistoryDto } from '../dtos/create.medical.history.dto';
 import { Beneficiaries } from '../entities/beneficiary.entity';
 import { BeneficiariesMapper } from '../mappers/beneficiaries.mapper';
 
@@ -15,7 +16,7 @@ export class BeneficiariesRepository {
   constructor(
     @InjectModel(Beneficiaries.name)
     private _beneficiariesModel: Model<Beneficiaries>,
-  ) {}
+  ) { }
 
   async createBeneficiary(
     beneficiaries: CreateBeneficiariesDao,
@@ -46,11 +47,11 @@ export class BeneficiariesRepository {
   private buildSearchCondition(searchKey?: string) {
     return searchKey
       ? {
-          $or: [
-            { name: new RegExp(searchKey, 'i') },
-            { lastname: new RegExp(searchKey, 'i') },
-          ],
-        }
+        $or: [
+          { name: new RegExp(searchKey, 'i') },
+          { lastname: new RegExp(searchKey, 'i') },
+        ],
+      }
       : {};
   }
 
@@ -105,10 +106,27 @@ export class BeneficiariesRepository {
   async getBeneficiaryById(id: string) {
     const beneficiary = await this._beneficiariesModel
       .findById(id)
-      .populate('alergies');
+      .populate('alergies')
+      .lean();
+    
+
+    if (!beneficiary) {
+      throw new NotFoundException('Beneficiary not found');
+    }
+    
+    return BeneficiariesMapper.mapToGetDao(beneficiary);
+  }
+
+  async addMedicalHistory(id: string, dto: CreateMedicalHistoryDto) {
+    const beneficiary = await this._beneficiariesModel.findByIdAndUpdate(
+      id,
+      { $push: { medicalHistories: dto } },
+      { new: true },
+    ).populate('medicalHistories');
     if (!beneficiary) {
       throw new NotFoundException('Beneficiary not found');
     }
     return BeneficiariesMapper.mapToGetDao(beneficiary);
+
   }
 }
