@@ -7,9 +7,10 @@ import { Users, UsersSchema } from './entities/users.entity';
 import { UsersRepository } from './repositories/users.repository';
 import { PasswordService } from './services/password.service';
 import { UsersService } from './services/users.service';
+import { PasswordController } from './controllers/password.controller';
 
 @Module({
-  controllers: [UsersController],
+  controllers: [UsersController, PasswordController],
   imports: [
     PrivilegesModule,
     MongooseModule.forFeature([{ name: Users.name, schema: UsersSchema }]),

@@ -3,13 +3,24 @@ import { CreateUserDao } from '../dao/create.user.dao';
 import { CreateUserDto } from '../dtos/create.user.dto';
 
 export class CreateUserMapper {
-  static mapToDao(dto: CreateUserDto, password: string): CreateUserDao {
+  static mapToEntity(dto: CreateUserDto, password: string): CreateUserDao {
     const ids = dto.privileges.map((element) => element.id);
     return {
       _id: CreateUUIDService.getUUID(),
       ...dto,
       privileges: ids,
       password: password,
+      isActive: true,
+    };
+  }
+
+  static mapToEntityForEdit(dto: CreateUserDto, userId: string): CreateUserDao {
+    const ids = dto.privileges.map((element) => element.id);
+    return {
+      _id: userId,
+      ...dto,
+      privileges: ids,
+      password: undefined,
       isActive: true,
     };
   }

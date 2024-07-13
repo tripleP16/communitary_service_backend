@@ -35,7 +35,6 @@ export class RolesGuard extends AuthGuard('jwt') {
     }
 
     const payload = this.decodeToken(token);
-    console.log(payload);
 
     const actions: string[] = payload.actions;
 
