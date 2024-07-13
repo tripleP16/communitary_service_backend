@@ -67,7 +67,10 @@ export class BeneficiariesMapper {
     const parent = beneficiary.parent as unknown as Parent;
     const medicalHistories =
       beneficiary.medicalHistories as unknown as MedicalHistory[];
-    const historySorted = medicalHistories.map((m) => this.mapMedicalHistoryToDao(m)).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    const medicalHistoriesMapped = medicalHistories.map((m) => this.mapMedicalHistoryToDao(m));
+    const latestMedicalHistory = medicalHistoriesMapped.reduce((latest, current) =>
+      current.createdAt > latest.createdAt ? current : latest
+    );
     return {
       id: beneficiary._id,
       name: beneficiary.name,
@@ -80,14 +83,14 @@ export class BeneficiariesMapper {
         id: a._id,
         name: a.name,
       })),
-      medicalHistories: historySorted,
+      medicalHistories: medicalHistoriesMapped,
       parent: {
         id: parent._id,
         name: parent.name,
         lastname: parent.lastname,
         phoneNumber: parent.phoneNumber,
       },
-      needsMedicalHistoryUpdate: this._needsMedicalHistoryUpdate(historySorted[0]),
+      needsMedicalHistoryUpdate: this._needsMedicalHistoryUpdate(latestMedicalHistory),
     };
   }
   static _needsMedicalHistoryUpdate(latestMedicalHistory: GetMedicalHistoryDao): boolean {
