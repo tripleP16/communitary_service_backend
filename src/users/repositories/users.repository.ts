@@ -109,8 +109,11 @@ export class UsersRepository {
           { lastname: new RegExp(searchKey, 'i') },
           { email: new RegExp(searchKey, 'i') },
         ],
+        isActive: true,
       }
-      : {};
+      : {
+        isActive: true,
+      };
   }
 
   private async getUsersWithPagination(query: PaginationParamsDto, condition: any = {}) {
