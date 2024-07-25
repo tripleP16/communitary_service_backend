@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { rethrow } from '@nestjs/core/helpers/rethrow';
 import { MailService } from 'src/mail/services/mail.service';
 import { PrivilegesRepository } from 'src/privileges/repositories/privileges.repository';
@@ -6,13 +6,12 @@ import { PaginationParamsDto } from 'src/utils/shared/dtos/pagination.params.dto
 import { CreateUserDto } from '../dtos/create.user.dto';
 import { RestartPasswordDto } from '../dtos/restart.password.dto';
 import { CreateUserMapper } from '../mappers/create.user.mapper';
+import { UsersMapper } from '../mappers/users.mapper';
 import { UsersRepository } from '../repositories/users.repository';
 import { PasswordService } from './password.service';
 
 @Injectable()
 export class UsersService {
-
-
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly privilegesRepository: PrivilegesRepository,
@@ -50,7 +49,7 @@ export class UsersService {
 
   async deleteUser(userId: string, userLogged: string) {
     if (userLogged === userId) {
-      throw new ForbiddenException('You cannot delete your own account. Only admin users can delete users.');
+      throw new ForbiddenException(' You cannot delete yourself. Only admin can do that.  Please contact your admin to delete this user.');
     }
     await this.usersRepository.deleteUser(userId);
   }
@@ -70,4 +69,15 @@ export class UsersService {
     }
 
   }
+
+  async getUserById(id: string) {
+    const user = await this.usersRepository.getUserById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return UsersMapper.mapUserModelToUserDetailDao(user);
+  }
+
+
 }
