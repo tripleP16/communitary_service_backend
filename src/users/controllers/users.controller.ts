@@ -3,10 +3,10 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Actions } from 'src/auth/decorators/actions.decorator';
 import { AccessTokenGuard } from 'src/auth/guards/access.token.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { GetUser } from 'src/utils/shared/decorators/user.decorator';
 import { PaginationParamsDto } from 'src/utils/shared/dtos/pagination.params.dto';
 import { CreateUserDto } from '../dtos/create.user.dto';
 import { UsersService } from '../services/users.service';
-import { GetUser } from 'src/utils/shared/decorators/user.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -45,5 +45,11 @@ export class UsersController {
   @Put('/edit/:userId')
   async updateUser(@Param('userId') userId: string, @Body() dto: CreateUserDto) {
     return this._userService.updateUser(userId, dto);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('/:id')
+  async getUserById(@Param('id') id: string) {
+    return this._userService.getUserById(id);
   }
 }
