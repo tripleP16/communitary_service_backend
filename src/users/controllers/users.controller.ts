@@ -23,6 +23,12 @@ export class UsersController {
     return this._userService.searchUsers(query);
 
   }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('/me')
+  async getUsersNe(@GetUser() userId: string) {
+    return this._userService.getUserById(userId);
+  }
   @Actions('CREATE_USER')
   @UseGuards(AccessTokenGuard)
   @UseGuards(RolesGuard)
@@ -52,4 +58,6 @@ export class UsersController {
   async getUserById(@Param('id') id: string) {
     return this._userService.getUserById(id);
   }
+
 }
+
