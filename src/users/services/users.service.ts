@@ -3,6 +3,7 @@ import { rethrow } from '@nestjs/core/helpers/rethrow';
 import { MailService } from 'src/mail/services/mail.service';
 import { PrivilegesRepository } from 'src/privileges/repositories/privileges.repository';
 import { PaginationParamsDto } from 'src/utils/shared/dtos/pagination.params.dto';
+import { ChangePasswordDto } from '../dtos/change.password.dto';
 import { CreateUserDto } from '../dtos/create.user.dto';
 import { RestartPasswordDto } from '../dtos/restart.password.dto';
 import { CreateUserMapper } from '../mappers/create.user.mapper';
@@ -77,6 +78,26 @@ export class UsersService {
     }
 
     return UsersMapper.mapUserModelToUserDetailDao(user);
+  }
+
+  async changePassword(dto: ChangePasswordDto, user: string) {
+    const userFound = await this.usersRepository.getUserById(user);
+    if (!userFound) {
+      throw new NotFoundException('User not found');
+    }
+
+    const isPasswordValid = await this.passwordService.comparePasswords(
+      dto.oldPassword,
+      userFound.password,
+    );
+
+    if (!isPasswordValid) {
+      throw new ForbiddenException('Invalid old password');
+    }
+
+    const hashedPassword = await this.passwordService.hashPassword(dto.newPassword);
+    await this.usersRepository.updatePassword(userFound._id, hashedPassword);
+    return;
   }
 
 
