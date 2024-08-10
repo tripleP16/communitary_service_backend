@@ -10,9 +10,11 @@ import { CreateUserMapper } from '../mappers/create.user.mapper';
 import { UsersMapper } from '../mappers/users.mapper';
 import { UsersRepository } from '../repositories/users.repository';
 import { PasswordService } from './password.service';
+import { EditUsersMeDto } from '../dtos/edit.user.me.dto';
 
 @Injectable()
 export class UsersService {
+
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly privilegesRepository: PrivilegesRepository,
@@ -98,6 +100,12 @@ export class UsersService {
     const hashedPassword = await this.passwordService.hashPassword(dto.newPassword);
     await this.usersRepository.updatePassword(userFound._id, hashedPassword);
     return;
+  }
+
+
+  async updateUsersMe(userId: string, dto: EditUsersMeDto) {
+    await this.usersRepository.updateUsersMe(userId, dto);
+    return UsersMapper.mapUserModelToGetUserDao(await this.usersRepository.getUserById(userId));
   }
 
 
