@@ -11,6 +11,7 @@ export class GetBeneficiariesDao {
   readonly alergies: GetAlergiesDao[];
   readonly medicalHistories: GetMedicalHistoryDao[];
   readonly parent: GetParentDao;
+  readonly needsMedicalHistoryUpdate: boolean;
 }
 
 export class GetParentDao {

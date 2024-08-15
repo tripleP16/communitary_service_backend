@@ -1,4 +1,4 @@
 export class GetPrivilegesDao {
-  readonly _id: string;
+  readonly id: string;
   readonly name: string;
 }

@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PaginationParamsDto } from 'src/utils/shared/dtos/pagination.params.dto';
 import { CreateUserDao } from '../dao/create.user.dao';
+import { EditUsersMeDto } from '../dtos/edit.user.me.dto';
 import { Users } from '../entities/users.entity';
 import { UsersMapper } from '../mappers/users.mapper';
 
@@ -109,8 +110,11 @@ export class UsersRepository {
           { lastname: new RegExp(searchKey, 'i') },
           { email: new RegExp(searchKey, 'i') },
         ],
+        isActive: true,
       }
-      : {};
+      : {
+        isActive: true,
+      };
   }
 
   private async getUsersWithPagination(query: PaginationParamsDto, condition: any = {}) {
@@ -176,5 +180,32 @@ export class UsersRepository {
     }
 
   }
+
+
+  async updateUsersMe(userId: string, dto: EditUsersMeDto) {
+
+    try {
+
+      const result = await this._usersModel.updateOne(
+        { _id: userId },
+        dto,
+      );
+
+      if (result.matchedCount === 0) {
+        throw new NotFoundException('User not found');
+      }
+
+      return;
+
+    } catch (error) {
+      if (error.code == 11000) {
+        throw new ConflictException('Email already exists');
+      }
+    }
+
+  }
+
+
+
 
 }

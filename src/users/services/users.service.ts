@@ -1,17 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { rethrow } from '@nestjs/core/helpers/rethrow';
 import { MailService } from 'src/mail/services/mail.service';
 import { PrivilegesRepository } from 'src/privileges/repositories/privileges.repository';
 import { PaginationParamsDto } from 'src/utils/shared/dtos/pagination.params.dto';
+import { ChangePasswordDto } from '../dtos/change.password.dto';
 import { CreateUserDto } from '../dtos/create.user.dto';
 import { RestartPasswordDto } from '../dtos/restart.password.dto';
 import { CreateUserMapper } from '../mappers/create.user.mapper';
+import { UsersMapper } from '../mappers/users.mapper';
 import { UsersRepository } from '../repositories/users.repository';
 import { PasswordService } from './password.service';
+import { EditUsersMeDto } from '../dtos/edit.user.me.dto';
 
 @Injectable()
 export class UsersService {
-
 
   constructor(
     private readonly usersRepository: UsersRepository,
@@ -48,7 +50,10 @@ export class UsersService {
   }
 
 
-  async deleteUser(userId: string) {
+  async deleteUser(userId: string, userLogged: string) {
+    if (userLogged === userId) {
+      throw new ForbiddenException(' You cannot delete yourself. Only admin can do that.  Please contact your admin to delete this user.');
+    }
     await this.usersRepository.deleteUser(userId);
   }
 
@@ -67,4 +72,41 @@ export class UsersService {
     }
 
   }
+
+  async getUserById(id: string) {
+    const user = await this.usersRepository.getUserById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return UsersMapper.mapUserModelToUserDetailDao(user);
+  }
+
+  async changePassword(dto: ChangePasswordDto, user: string) {
+    const userFound = await this.usersRepository.getUserById(user);
+    if (!userFound) {
+      throw new NotFoundException('User not found');
+    }
+
+    const isPasswordValid = await this.passwordService.comparePasswords(
+      dto.oldPassword,
+      userFound.password,
+    );
+
+    if (!isPasswordValid) {
+      throw new ForbiddenException('Invalid old password');
+    }
+
+    const hashedPassword = await this.passwordService.hashPassword(dto.newPassword);
+    await this.usersRepository.updatePassword(userFound._id, hashedPassword);
+    return;
+  }
+
+
+  async updateUsersMe(userId: string, dto: EditUsersMeDto) {
+    await this.usersRepository.updateUsersMe(userId, dto);
+    return UsersMapper.mapUserModelToGetUserDao(await this.usersRepository.getUserById(userId));
+  }
+
+
 }
