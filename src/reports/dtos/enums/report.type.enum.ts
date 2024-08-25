@@ -1,5 +1,5 @@
 export enum ReportType {
-    bmi = 'bmi',
-    weight = 'weight',
-    height = 'height',
+  bmi = 'bmi',
+  weight = 'weight',
+  height = 'height',
 }

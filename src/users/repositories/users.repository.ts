@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { rethrow } from '@nestjs/core/helpers/rethrow';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -10,9 +14,7 @@ import { UsersMapper } from '../mappers/users.mapper';
 
 @Injectable()
 export class UsersRepository {
-
-
-  constructor(@InjectModel(Users.name) private _usersModel: Model<Users>) { }
+  constructor(@InjectModel(Users.name) private _usersModel: Model<Users>) {}
 
   async createUser(user: CreateUserDao): Promise<Users> {
     try {
@@ -73,21 +75,19 @@ export class UsersRepository {
   }
 
   async deleteUser(userId: string) {
-
-    const result = await this._usersModel.updateOne({ _id: userId }, { isActive: false });
+    const result = await this._usersModel.updateOne(
+      { _id: userId },
+      { isActive: false },
+    );
 
     if (result.matchedCount === 0) {
       throw new NotFoundException('User not found');
     }
-
   }
 
   async updateUser(userId: string, dto: CreateUserDao) {
     try {
-      const result = await this._usersModel.updateOne(
-        { _id: userId },
-        dto,
-      );
+      const result = await this._usersModel.updateOne({ _id: userId }, dto);
 
       if (result.matchedCount === 0) {
         throw new NotFoundException('User not found');
@@ -98,36 +98,33 @@ export class UsersRepository {
       }
       rethrow(error);
     }
-
-
   }
 
   private buildSearchCondition(searchKey?: string) {
     return searchKey
       ? {
-        $or: [
-          { name: new RegExp(searchKey, 'i') },
-          { lastname: new RegExp(searchKey, 'i') },
-          { email: new RegExp(searchKey, 'i') },
-        ],
-        isActive: true,
-      }
+          $or: [
+            { name: new RegExp(searchKey, 'i') },
+            { lastname: new RegExp(searchKey, 'i') },
+            { email: new RegExp(searchKey, 'i') },
+          ],
+          isActive: true,
+        }
       : {
-        isActive: true,
-      };
+          isActive: true,
+        };
   }
 
-  private async getUsersWithPagination(query: PaginationParamsDto, condition: any = {}) {
+  private async getUsersWithPagination(
+    query: PaginationParamsDto,
+    condition: any = {},
+  ) {
     const { page, pageSize } = query;
     const skip = (page - 1) * pageSize;
     const totalCount = await this._usersModel.countDocuments(condition);
     const totalPages = Math.ceil(totalCount / pageSize);
 
-    const users = await this.fetchUsers(
-      condition,
-      skip,
-      pageSize,
-    );
+    const users = await this.fetchUsers(condition, skip, pageSize);
 
     if (users.length <= 0) {
       throw new NotFoundException('Users not found');
@@ -140,7 +137,7 @@ export class UsersRepository {
       page > 1,
       page,
       pageSize,
-    )
+    );
   }
 
   private async getUsersWithoutPagination(condition: any = {}) {
@@ -149,22 +146,20 @@ export class UsersRepository {
       throw new NotFoundException('Users not found');
     }
 
-    const usersMapped = users.map((user) => UsersMapper.mapUserModelToGetUserDao(user));
+    const usersMapped = users.map((user) =>
+      UsersMapper.mapUserModelToGetUserDao(user),
+    );
 
     return usersMapped;
-
-
   }
 
-  private async fetchUsers(condition: any, skip?: number, limit?: number,) {
+  private async fetchUsers(condition: any, skip?: number, limit?: number) {
     const query = this._usersModel.find(condition);
     if (skip != null && limit != null) {
       query.skip(skip).limit(limit);
     }
     return query.exec();
   }
-
-
 
   async findUsers(query: PaginationParamsDto) {
     try {
@@ -178,34 +173,21 @@ export class UsersRepository {
     } catch (error) {
       rethrow(error);
     }
-
   }
 
-
   async updateUsersMe(userId: string, dto: EditUsersMeDto) {
-
     try {
-
-      const result = await this._usersModel.updateOne(
-        { _id: userId },
-        dto,
-      );
+      const result = await this._usersModel.updateOne({ _id: userId }, dto);
 
       if (result.matchedCount === 0) {
         throw new NotFoundException('User not found');
       }
 
       return;
-
     } catch (error) {
       if (error.code == 11000) {
         throw new ConflictException('Email already exists');
       }
     }
-
   }
-
-
-
-
 }
