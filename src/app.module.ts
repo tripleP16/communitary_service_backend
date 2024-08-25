@@ -14,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
 import { AlergiesModule } from './alergies/alergies.module';
 import { BeneficiariesModule } from './beneficiaries/beneficiaries.module';
 import { ForgotPasswordModule } from './forgot-password/forgot.password.module';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ForgotPasswordModule } from './forgot-password/forgot.password.module';
     AlergiesModule,
     BeneficiariesModule,
     ForgotPasswordModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [
