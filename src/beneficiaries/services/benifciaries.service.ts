@@ -36,9 +36,8 @@ export class BeneficiariesService {
   }
 
   async getBeneficiaryById(id: string) {
-    const beneficiary = await this._beneficiariesRepository.getBeneficiaryById(
-      id,
-    );
+    const beneficiary =
+      await this._beneficiariesRepository.getBeneficiaryById(id);
     if (!beneficiary) {
       throw new NotFoundException('Beneficiary not found');
     }
@@ -48,7 +47,7 @@ export class BeneficiariesService {
   async addMedicalHistory(id: string, dto: CreateMedicalHistoryDto) {
     try {
       await this._beneficiariesRepository.addMedicalHistory(id, dto);
-    }catch(e){
+    } catch (e) {
       rethrow(e);
     }
   }

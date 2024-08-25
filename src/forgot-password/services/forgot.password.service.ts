@@ -21,7 +21,7 @@ export class ForgotPasswordService {
     private readonly usersRepository: UsersRepository,
     private readonly mailService: MailService,
     private readonly tokenService: TokenService,
-  ) { }
+  ) {}
 
   async createCode(dto: CreateCodeDto) {
     const user = await this.usersRepository.getUserByEmail(dto.email);

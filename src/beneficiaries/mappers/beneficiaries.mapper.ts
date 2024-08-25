@@ -53,23 +53,27 @@ export class BeneficiariesMapper {
     };
   }
 
-
-  static mapMedicalHistoryToDao(medicalHistory: MedicalHistory): GetMedicalHistoryDao {
+  static mapMedicalHistoryToDao(
+    medicalHistory: MedicalHistory,
+  ): GetMedicalHistoryDao {
     return {
       id: medicalHistory._id,
       height: medicalHistory.height,
       weight: medicalHistory.weight,
       createdAt: medicalHistory.createdAt,
-    }
+    };
   }
 
   static mapToGetDao(beneficiary: Beneficiaries): GetBeneficiariesDao {
     const parent = beneficiary.parent as unknown as Parent;
     const medicalHistories =
       beneficiary.medicalHistories as unknown as MedicalHistory[];
-    const medicalHistoriesMapped = medicalHistories.map((m) => this.mapMedicalHistoryToDao(m));
-    const latestMedicalHistory = medicalHistoriesMapped.reduce((latest, current) =>
-      current.createdAt > latest.createdAt ? current : latest
+    const medicalHistoriesMapped = medicalHistories.map((m) =>
+      this.mapMedicalHistoryToDao(m),
+    );
+    const latestMedicalHistory = medicalHistoriesMapped.reduce(
+      (latest, current) =>
+        current.createdAt > latest.createdAt ? current : latest,
     );
     return {
       id: beneficiary._id,
@@ -90,10 +94,13 @@ export class BeneficiariesMapper {
         lastname: parent.lastname,
         phoneNumber: parent.phoneNumber,
       },
-      needsMedicalHistoryUpdate: this._needsMedicalHistoryUpdate(latestMedicalHistory),
+      needsMedicalHistoryUpdate:
+        this._needsMedicalHistoryUpdate(latestMedicalHistory),
     };
   }
-  static _needsMedicalHistoryUpdate(latestMedicalHistory: GetMedicalHistoryDao): boolean {
+  static _needsMedicalHistoryUpdate(
+    latestMedicalHistory: GetMedicalHistoryDao,
+  ): boolean {
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
     return latestMedicalHistory.createdAt < oneMonthAgo;

@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { rethrow } from '@nestjs/core/helpers/rethrow';
 import { MailService } from 'src/mail/services/mail.service';
 import { PrivilegesRepository } from 'src/privileges/repositories/privileges.repository';
@@ -14,13 +18,12 @@ import { EditUsersMeDto } from '../dtos/edit.user.me.dto';
 
 @Injectable()
 export class UsersService {
-
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly privilegesRepository: PrivilegesRepository,
     private readonly passwordService: PasswordService,
     private readonly mailService: MailService,
-  ) { }
+  ) {}
 
   async create(dto: CreateUserDto) {
     const ids = dto.privileges.map((element) => element.id);
@@ -49,10 +52,11 @@ export class UsersService {
     return;
   }
 
-
   async deleteUser(userId: string, userLogged: string) {
     if (userLogged === userId) {
-      throw new ForbiddenException(' You cannot delete yourself. Only admin can do that.  Please contact your admin to delete this user.');
+      throw new ForbiddenException(
+        ' You cannot delete yourself. Only admin can do that.  Please contact your admin to delete this user.',
+      );
     }
     await this.usersRepository.deleteUser(userId);
   }
@@ -70,7 +74,6 @@ export class UsersService {
     } catch (error) {
       rethrow(error);
     }
-
   }
 
   async getUserById(id: string) {
@@ -97,16 +100,17 @@ export class UsersService {
       throw new ForbiddenException('Invalid old password');
     }
 
-    const hashedPassword = await this.passwordService.hashPassword(dto.newPassword);
+    const hashedPassword = await this.passwordService.hashPassword(
+      dto.newPassword,
+    );
     await this.usersRepository.updatePassword(userFound._id, hashedPassword);
     return;
   }
 
-
   async updateUsersMe(userId: string, dto: EditUsersMeDto) {
     await this.usersRepository.updateUsersMe(userId, dto);
-    return UsersMapper.mapUserModelToGetUserDao(await this.usersRepository.getUserById(userId));
+    return UsersMapper.mapUserModelToGetUserDao(
+      await this.usersRepository.getUserById(userId),
+    );
   }
-
-
 }

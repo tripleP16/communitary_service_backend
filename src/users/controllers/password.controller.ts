@@ -29,5 +29,4 @@ export class PasswordController {
   ) {
     return this.usersService.changePassword(dto, user);
   }
-
 }

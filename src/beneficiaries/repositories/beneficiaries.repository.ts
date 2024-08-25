@@ -16,7 +16,7 @@ export class BeneficiariesRepository {
   constructor(
     @InjectModel(Beneficiaries.name)
     private _beneficiariesModel: Model<Beneficiaries>,
-  ) { }
+  ) {}
 
   async createBeneficiary(
     beneficiaries: CreateBeneficiariesDao,
@@ -47,11 +47,11 @@ export class BeneficiariesRepository {
   private buildSearchCondition(searchKey?: string) {
     return searchKey
       ? {
-        $or: [
-          { name: new RegExp(searchKey, 'i') },
-          { lastname: new RegExp(searchKey, 'i') },
-        ],
-      }
+          $or: [
+            { name: new RegExp(searchKey, 'i') },
+            { lastname: new RegExp(searchKey, 'i') },
+          ],
+        }
       : {};
   }
 
@@ -108,25 +108,25 @@ export class BeneficiariesRepository {
       .findById(id)
       .populate('alergies')
       .lean();
-    
 
     if (!beneficiary) {
       throw new NotFoundException('Beneficiary not found');
     }
-    
+
     return BeneficiariesMapper.mapToGetDao(beneficiary);
   }
 
   async addMedicalHistory(id: string, dto: CreateMedicalHistoryDto) {
-    const beneficiary = await this._beneficiariesModel.findByIdAndUpdate(
-      id,
-      { $push: { medicalHistories: dto } },
-      { new: true },
-    ).populate('medicalHistories');
+    const beneficiary = await this._beneficiariesModel
+      .findByIdAndUpdate(
+        id,
+        { $push: { medicalHistories: dto } },
+        { new: true },
+      )
+      .populate('medicalHistories');
     if (!beneficiary) {
       throw new NotFoundException('Beneficiary not found');
     }
     return BeneficiariesMapper.mapToGetDao(beneficiary);
-
   }
 }

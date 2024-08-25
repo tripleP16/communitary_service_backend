@@ -40,10 +40,12 @@ export class BeneficiariesController {
   @UseGuards(AccessTokenGuard)
   @UseGuards(RolesGuard)
   @Patch('/medical/history/:id')
-  async addMedicalHistory(@Param('id') id: string, @Body() dto: CreateMedicalHistoryDto){
+  async addMedicalHistory(
+    @Param('id') id: string,
+    @Body() dto: CreateMedicalHistoryDto,
+  ) {
     return this.service.addMedicalHistory(id, dto);
   }
-
 
   @UseGuards(AccessTokenGuard)
   @Get('/:id')
