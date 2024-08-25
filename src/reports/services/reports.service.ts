@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  GetGlobalReportDto,
-  GetGlobalReportDtoToService,
-} from '../dtos/get.global.report.dto';
+import { GetGlobalReportDtoToService } from '../dtos/get.global.report.dto';
 import { ReportsGlobalRepository } from '../repositories/reports.global.repository';
 import { GetBeneficiariesReportDtoToService } from '../dtos/get.beneficiaries.report.dto';
 import { ReportsBeneficiaryRepository } from '../repositories/reports.beneficiary.repository';

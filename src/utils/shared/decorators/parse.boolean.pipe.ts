@@ -7,6 +7,7 @@ import {
 
 @Injectable()
 export class ParseBooleanPipe implements PipeTransform<string, boolean> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   transform(value: string, metadata: ArgumentMetadata): boolean {
     if (value === undefined) {
       throw new BadRequestException('Boolean value is required');
