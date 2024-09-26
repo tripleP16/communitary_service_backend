@@ -36,3 +36,10 @@ export class CreateMedicalHistoryDto {
   @IsNotEmpty()
   readonly createdAt: Date;
 }
+
+export class CreateMedicalHistoryDtoToService {
+  _id: string;
+  height: number;
+  weight: number;
+  createdAt: Date;
+}
